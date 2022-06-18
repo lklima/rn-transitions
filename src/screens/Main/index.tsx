@@ -7,6 +7,8 @@ import Card from "./components/Card";
 export default function Main() {
   const [count, setCount] = useState(0);
 
+  const cards = Array.from({ length: count }, (_, index) => index);
+
   function handleCard(type: string) {
     if (type === "add") {
       setCount(count + 1);
@@ -22,21 +24,21 @@ export default function Main() {
       <S.ButtonsContent></S.ButtonsContent>
       <S.RowContent>
         <S.Text>
-          View Count <S.Count> ({count})</S.Count>
+          View Count <S.Count>({count})</S.Count>
         </S.Text>
         <S.AddButtonsContent>
           <S.Button onPress={() => handleCard("remove")}>
-            <AntDesign name="minus" size={28} />
+            <AntDesign name="minus" size={25} />
           </S.Button>
           <S.Button onPress={() => handleCard("add")}>
-            <AntDesign name="plus" size={28} />
+            <AntDesign name="plus" size={25} />
           </S.Button>
         </S.AddButtonsContent>
       </S.RowContent>
       <S.CardContent>
-        <Card />
-        <Card />
-        <Card />
+        {cards.map((card) => (
+          <Card key={card} index={card} />
+        ))}
       </S.CardContent>
     </S.Container>
   );

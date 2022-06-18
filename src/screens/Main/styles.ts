@@ -45,7 +45,7 @@ export const Button = styled.TouchableOpacity`
 `;
 
 export const CardContent = styled.View`
-  width: 90%;
+  width: 100%;
   flex-direction: row;
   justify-content: space-between;
   flex-wrap: wrap;
