@@ -1,15 +1,46 @@
+import { Dimensions } from "react-native";
+import Animated from "react-native-reanimated";
 import styled from "styled-components/native";
+
+const { width } = Dimensions.get("window");
+
+interface TextPops {
+  selected: boolean;
+}
 
 export const Container = styled.SafeAreaView`
   flex: 1;
   align-items: center;
 `;
 
-export const ButtonsContent = styled.View`
-  width: 90%;
+export const OptionsContent = styled.View`
+  width: ${width - 35}px;
   height: 80px;
   border-radius: 8px;
   background: #eeedee;
+  overflow: hidden;
+  flex-direction: row;
+  margin-top: 20px;
+`;
+
+export const Highlight = styled(Animated.View)`
+  height: ${(width - 35) / 3}px;
+  width: ${(width - 35) / 3}px;
+  background: #007aff;
+  position: absolute;
+`;
+
+export const Option = styled.TouchableOpacity.attrs({
+  activeOpacity: 0.8,
+})`
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const OptionText = styled.Text<TextPops>`
+  font-size: 20px;
+  color: ${({ selected }) => (selected ? "white" : "#007aff")};
 `;
 
 export const RowContent = styled.View`
