@@ -13,6 +13,7 @@ import * as S from "./styles";
 import HoleCard from "./components/HoleCard";
 import PoofCard from "./components/PoofCard";
 import VanishCard from "./components/VanishCard";
+import ShredCard from "./components/ShredCard";
 
 export default function Main() {
   const { width } = useWindowDimensions();
@@ -49,7 +50,7 @@ export default function Main() {
 
   function renderCards() {
     if (optionSelected === 0) {
-      return cards.map((card) => <HoleCard key={card} index={card} />);
+      return cards.map((card) => <ShredCard key={card} index={card} />);
     } else if (optionSelected === 1) {
       return cards.map((card) => <PoofCard key={card} index={card} />);
     }
