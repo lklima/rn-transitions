@@ -1,8 +1,9 @@
 import React, { useRef } from "react";
 import { FlipInEasyX, withSequence, withTiming } from "react-native-reanimated";
-import { Pressable } from "react-native";
+import { useWindowDimensions } from "react-native";
 
 import * as S from "./styles";
+
 import Captured from "./components/Captured";
 
 import shredder from "./assets/shredder.png";
@@ -12,6 +13,7 @@ interface CardProps {
 }
 
 export default function ShredCard({ index }: CardProps) {
+  const { width } = useWindowDimensions();
   const capture = useRef(null);
 
   function cardExiting() {
@@ -27,9 +29,11 @@ export default function ShredCard({ index }: CardProps) {
           ),
         },
       ],
+      height: withTiming(0, { duration: 800 }),
     };
     const initialValues = {
       transform: [{ translateY: 0 }],
+      height: width / 2 - 20,
     };
     return {
       initialValues,
@@ -61,25 +65,23 @@ export default function ShredCard({ index }: CardProps) {
     };
   }
 
-  function handlePress() {
-    capture.current.capture();
-  }
-
   return (
-    <Pressable onPress={handlePress}>
-      <S.Container index={index}>
-        <S.Shredder
-          index={index}
-          resizeMode="contain"
-          source={shredder}
-          exiting={shredExiting}
-        />
-        <Captured ref={capture}>
-          <S.CardView index={index} entering={FlipInEasyX} exiting={cardExiting}>
-            <S.CardText>Hello{"\n"}World</S.CardText>
-          </S.CardView>
-        </Captured>
-      </S.Container>
-    </Pressable>
+    <S.Container index={index}>
+      <S.Shredder
+        index={index}
+        resizeMode="contain"
+        source={shredder}
+        exiting={shredExiting}
+      />
+      <Captured capture={capture} />
+      <S.CardView
+        ref={capture}
+        index={index}
+        entering={FlipInEasyX}
+        exiting={cardExiting}
+      >
+        <S.CardText>Hello{"\n"}World</S.CardText>
+      </S.CardView>
+    </S.Container>
   );
 }

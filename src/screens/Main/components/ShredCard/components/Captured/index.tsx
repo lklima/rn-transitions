@@ -1,124 +1,112 @@
-import React, {
-  forwardRef,
-  useState,
-  useCallback,
-  useRef,
-  useImperativeHandle,
-} from "react";
-import { Image, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { useWindowDimensions } from "react-native";
+import { withSequence, withTiming } from "react-native-reanimated";
 import { captureRef } from "react-native-view-shot";
 
+import { Container, Slice, SliceImage } from "./styles";
+
 interface Props {
-  children: React.ReactNode;
+  capture: any;
 }
 
-const Captured = forwardRef(({ children }: Props, _ref) => {
-  const ref = useRef(null);
+export default function Captured({ capture }: Props) {
+  const { width } = useWindowDimensions();
 
-  const [dims, setDims] = useState({ x: 0, y: 0, width: 0, height: 0 });
   const [img, setImg] = useState(null);
 
-  const capture = useCallback(() => {
-    if (ref.current && dims.width) {
-      captureRef(ref, { width: dims.width, height: dims.height }).then((img) => {
-        console.log(img);
-        setImg(img);
-      });
+  const cardWidth = width / 2 - 20;
+  const cardHeight = width / 2 - 20;
+  const percentage = 1;
+  const shredCount = 16;
+  const shredWidth = cardWidth / shredCount;
+
+  useEffect(() => {
+    if (capture.current && width) {
+      setTimeout(() => {
+        captureRef(capture, { width: cardWidth, height: cardHeight }).then(setImg);
+      }, 300);
     }
-  }, [ref, dims]);
+  }, [capture, width]);
 
-  useImperativeHandle(_ref, () => ({ capture }), [capture]);
-
-  if (img) {
-    // Change percentage to move animation along
-    const percentage = 1;
-    const shredCount = 16;
-
-    const shredWidth = dims.width / shredCount;
-    return (
-      <View
-        style={{
-          width: dims.width,
-          height: dims.height,
-        }}
-      >
-        {new Array(shredCount).fill(0).map((value, index) => {
-          // Rotate out from center
-          // <---o--->
-          const fromMiddle = index - shredCount / 2;
-
-          // Alternate direction
-          const dir = index % 2 === 0 ? 1 : -1;
-          const rotation = 15 * percentage * dir;
-          return (
-            <View
-              key={String(index)}
-              style={[
-                {
-                  position: "absolute",
-                  bottom: 0,
-                  top: 0,
-
-                  left: shredWidth * index,
-                  maxWidth: shredWidth,
-                  minWidth: shredWidth,
-                  backgroundColor: "white",
-                  overflow: "hidden",
-                },
-                {
-                  transform: [
-                    // Make paper look like this from top-down perspective: \/\/\/\/\/\/
-                    {
-                      rotateY: rotation + "deg",
-                    },
-
-                    // Move up so we translate around the origin at the top center.
-                    {
-                      translateY: -shredWidth,
-                    },
-                    {
-                      // Back + Forward from top
-                      rotateX: dir * (Math.random() * 10 + 2) * percentage + "deg",
-                    },
-                    // Move back down so the original position matches.
-                    {
-                      translateY: shredWidth,
-                    },
-                  ],
-                },
-              ]}
-            >
-              <Image
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  bottom: 0,
-                  left: shredWidth * -index,
-                  // Drop the opacity to create the shadow effect of some parts rotating more to the right/left.
-                  opacity: dir === 1 ? 1 : 1.0 - 0.2 * percentage,
-                  width: dims.width,
-                  height: dims.height,
-                }}
-                source={{ uri: img }}
-              />
-            </View>
-          );
-        })}
-      </View>
-    );
+  function cardExiting() {
+    "worklet";
+    const animations = {
+      transform: [
+        {
+          translateY: withSequence(
+            withTiming(5, { duration: 50 }),
+            withTiming(-5, { duration: 50 }),
+            withTiming(20, { duration: 300 }),
+            withTiming(200, { duration: 600 })
+          ),
+        },
+      ],
+    };
+    const initialValues = {
+      transform: [{ translateY: 0 }],
+      opacity: 1,
+    };
+    return {
+      initialValues,
+      animations,
+    };
   }
 
-  return (
-    <View
-      onLayout={(event) => {
-        const { x, y, width, height } = event.nativeEvent.layout;
-        setDims({ x, y, width, height });
-      }}
-      ref={ref}
-    >
-      {children}
-    </View>
-  );
-});
+  if (!img) return <></>;
 
-export default Captured;
+  return (
+    <Container width={cardWidth} height={cardHeight} exiting={cardExiting}>
+      {new Array(shredCount).fill(0).map((_, index) => {
+        // Alternate direction
+        const dir = index % 2 === 0 ? 1 : -1;
+        const translateY = index % 2 === 0 ? 0.5 : 0;
+        const rotation = 15 * percentage * dir;
+
+        return (
+          <Slice
+            key={String(index)}
+            width={shredWidth}
+            index={index}
+            exiting={() => {
+              "worklet";
+              const animations = {
+                transform: [
+                  { rotateY: rotation + "deg" },
+                  { perspective: 700 },
+                  { translateY: -shredWidth },
+                  { rotateX: dir * (Math.random() * 10 + 2) * percentage + "deg" },
+                  { translateY: shredWidth },
+                  { translateY: translateY },
+                ],
+              };
+              const initialValues = {
+                transform: [
+                  { rotateY: "0deg" },
+                  { perspective: 0 },
+                  { translateY: 0 },
+                  { rotateX: "0deg" },
+                  { translateY: 0 },
+                  { translateY: 0 },
+                ],
+                opacity: 1,
+              };
+              return {
+                initialValues,
+                animations,
+              };
+            }}
+          >
+            <SliceImage
+              width={cardWidth}
+              height={cardHeight}
+              shredWidth={shredWidth}
+              index={index}
+              source={{ uri: img }}
+              dir={dir}
+            />
+          </Slice>
+        );
+      })}
+    </Container>
+  );
+}

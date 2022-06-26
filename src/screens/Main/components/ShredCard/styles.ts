@@ -36,7 +36,7 @@ export const CardText = styled.Text`
 export const Shredder = styled(Animated.Image)<ContainerProps>`
   width: ${width / 2 - 2}px;
   position: absolute;
-  z-index: 99;
+  z-index: 9999;
   align-self: center;
   left: ${({ index }) => (index % 2 === 0 ? 5 : -3)}px;
   opacity: 0;
