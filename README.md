@@ -11,4 +11,6 @@ React Native animated app with reanimated + expo and.
 
 Give me a ⭐️ if liked it and follow me.
 
-https://user-images.githubusercontent.com/44346970/174502437-42f4a302-f5d5-4565-a4ac-2bde9a2b84f1.mp4
+https://user-images.githubusercontent.com/44346970/175845652-96978d45-07cf-4412-b6ac-42bad317702c.mp4
+
+
