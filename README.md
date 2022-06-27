@@ -7,7 +7,7 @@
   <img alt="Supports Expo Android" longdesc="Supports Expo Android" src="https://img.shields.io/badge/Android-4630EB.svg?style=flat-square&logo=ANDROID&labelColor=A4C639&logoColor=fff" />
 </p>
 
-React Native animated app with reanimated + expo and.
+React Native animated app with reanimated + expo.
 
 Give me a ⭐️ if liked it and follow me.
 
