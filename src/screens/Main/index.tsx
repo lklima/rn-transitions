@@ -12,7 +12,6 @@ import * as S from "./styles";
 
 import HoleCard from "./components/HoleCard";
 import PoofCard from "./components/PoofCard";
-import VanishCard from "./components/VanishCard";
 import ShredCard from "./components/ShredCard";
 
 export default function Main() {
@@ -52,10 +51,10 @@ export default function Main() {
     if (optionSelected === 0) {
       return cards.map((card) => <ShredCard key={card} index={card} />);
     } else if (optionSelected === 1) {
-      return cards.map((card) => <PoofCard key={card} index={card} />);
+      return cards.map((card) => <HoleCard key={card} index={card} />);
     }
 
-    return cards.map((card) => <VanishCard key={card} index={card} />);
+    return cards.map((card) => <PoofCard key={card} index={card} />);
   }
 
   return (
@@ -63,13 +62,13 @@ export default function Main() {
       <S.OptionsContent>
         <S.Highlight style={highlightAnimatedStyle} />
         <S.Option onPress={() => setOptionSelected(0)}>
-          <S.OptionText selected={optionSelected === 0}>Hole</S.OptionText>
+          <S.OptionText selected={optionSelected === 0}>Shredded</S.OptionText>
         </S.Option>
         <S.Option onPress={() => setOptionSelected(1)}>
-          <S.OptionText selected={optionSelected === 1}>Poof</S.OptionText>
+          <S.OptionText selected={optionSelected === 1}>Hole</S.OptionText>
         </S.Option>
         <S.Option onPress={() => setOptionSelected(2)}>
-          <S.OptionText selected={optionSelected === 2}>Vanish</S.OptionText>
+          <S.OptionText selected={optionSelected === 2}>Poof</S.OptionText>
         </S.Option>
       </S.OptionsContent>
       <S.RowContent>

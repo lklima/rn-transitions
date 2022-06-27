@@ -24,6 +24,7 @@ export const CardView = styled(Animated.View)<ContainerProps>`
   border-radius: 20px;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 `;
 
 export const CardText = styled.Text`

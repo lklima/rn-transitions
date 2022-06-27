@@ -22,14 +22,18 @@ export default function ShredCard({ index }: CardProps) {
       transform: [
         {
           translateY: withSequence(
-            withTiming(5, { duration: 50 }),
-            withTiming(-5, { duration: 50 }),
-            withTiming(20, { duration: 300 }),
-            withTiming(200, { duration: 600 })
+            withTiming(2, { duration: 50 }),
+            withTiming(-2, { duration: 50 }),
+            withTiming(20, { duration: 200 }),
+            withTiming(20, { duration: 200 }),
+            withTiming(140, { duration: 600 }),
+            withTiming(140, { duration: 100 }),
+            withTiming(135, { duration: 50 }),
+            withTiming(200, { duration: 200 })
           ),
         },
       ],
-      height: withTiming(0, { duration: 800 }),
+      height: withTiming(0, { duration: 1200 }),
     };
     const initialValues = {
       transform: [{ translateY: 0 }],
@@ -46,12 +50,16 @@ export default function ShredCard({ index }: CardProps) {
     const animations = {
       transform: [
         {
-          translateY: withTiming(0, { duration: 700 }),
+          translateY: withSequence(
+            withTiming(30, { duration: 1000 }),
+            withTiming(33, { duration: 100 }),
+            withTiming(30, { duration: 100 })
+          ),
         },
       ],
       opacity: withSequence(
         withTiming(1, { duration: 200 }),
-        withTiming(1, { duration: 600 }),
+        withTiming(1, { duration: 1300 }),
         withTiming(0, { duration: 200 })
       ),
     };
